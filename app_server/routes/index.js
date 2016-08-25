@@ -4,11 +4,11 @@ var ctrlLocations = require('../controllers/locations');
 var ctrlOthers = require('../controllers/others');
 
 /* GET home page. */
-router.get('/', ctrlLocations.homelist);
-router.get('/location/:locationid', ctrlLocations.locationInfo);
-router.get('/location/review/new', ctrlLocations.addReview);
-router.post('/location/:locationid/reviews/new', ctrlLocations.doAddReview);
-
-router.get('/about', ctrlOthers.about);
+router.get('/', ctrlOthers.angularApp);
+// router.get('/location/:locationid', ctrlLocations.locationInfo);
+// router.get('/location/:locationid/review/new', ctrlLocations.addReview);
+// router.post('/location/:locationid/review/new', ctrlLocations.doAddReview);
+//
+// router.get('/about', ctrlOthers.about);
 
 module.exports = router;

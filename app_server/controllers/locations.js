@@ -3,8 +3,45 @@ var apiOptions = {
   server : "http://localhost:3000"
 };
 if (process.env.NODE_ENV === 'production') {
-  apiOptions.server = "thewifinder.herokuapp.com";
+  apiOptions.server = "https://thewifinder.herokuapp.com";
 }
+
+var _isNumeric = function (n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+};
+
+var _formatDistance = function (distance) {
+  var numDistance, unit;
+  if (distance && _isNumeric(distance)) {
+    if (distance > 1) {
+      numDistance = parseFloat(distance).toFixed(1);
+      unit = 'km';
+    } else {
+      numDistance = parseInt(distance * 1000,10);
+      unit = 'm';
+    }
+    return numDistance + unit;
+  } else {
+    return "?";
+  }
+};
+
+var _showError = function (req, res, status) {
+  var title, content;
+  if (status === 404) {
+    title = "404, page not found";
+    content = "Oh dear. Looks like we can't find this page. Sorry.";
+  } else {
+    title = status + ", something's gone wrong";
+    content = "Something, somewhere, has gone just a little bit wrong.";
+  }
+  res.status(status);
+  res.render('generic-text', {
+    title : title,
+    content : content
+  });
+};
+
 
 var renderHomepage = function(req, res, responseBody) {
   res.render('locations-list', {
@@ -30,23 +67,6 @@ var renderDetailPage = function (req, res, locDetail) {
       callToAction: 'If you\'ve been and you like it - or if you don\'t - please leave a review to help other people just like you.'
     },
     location: locDetail
-  });
-};
-
-
-var _showError = function (req, res, status) {
-  var title, content;
-  if (status === 404) {
-    title = "404, page not found";
-    content = "Oh dear. Looks like we can't find this page. Sorry.";
-  } else {
-    title = status + ", something's gone wrong";
-    content = "Something, somewhere, has gone just a little bit wrong.";
-  }
-  res.status(status);
-  res.render('generic-text', {
-    title : title,
-    content : content
   });
 };
 

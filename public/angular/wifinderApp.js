@@ -13,7 +13,7 @@ var locationListCtrl = function ($scope, wifinderData, geolocation) {
         $scope.data = { locations: data };
       })
       .error(function (e) {
-        $scope.message = "Sorry, something's gone wrong";
+        $scope.message = "SorFry, something's gone wrong";
       });
   };
 
