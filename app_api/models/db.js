@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var gracefulShutdown;
-var dbURI = 'mongodb://localhost/wf';
+var dbURI = 'mongodb://localhost/wifinder';
 
 if (process.env.NODE_ENV === 'production') {
   dbURI = 'mongodb://heroku_hvdl97z2:n90svjmi9peeuu30ts0m92egf0@ds013456.mlab.com:13456/heroku_hvdl97z2'
