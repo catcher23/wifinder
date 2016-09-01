@@ -1,15 +1,18 @@
 (function () {
+
   angular
     .module('wifinderApp')
     .directive('ratingStars', ratingStars);
 
-  function ratingStars() {
+  function ratingStars () {
     return {
       restrict: 'EA',
       scope: {
-        thisRating: '=rating'
+        thisRating : '=rating'
       },
       templateUrl: '/common/directives/ratingStars/ratingStars.template.html'
     };
   }
-}());
+
+
+})();
