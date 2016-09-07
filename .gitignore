@@ -1,2 +1,4 @@
 .idea/
 node_modules/
+app_server/config/env/development.js
+.env

@@ -1,13 +1,18 @@
+require('dotenv').config();
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-require('./app_api/models/db');
 var uglifyJs = require("uglify-js");
-var fs = require('fs');
+var passport = require('passport');
 
+require('./app_api/models/db');
+require('./app_api/config/passport');
+require('./app_api/config/yelp');
+
+var fs = require('fs');
 
 var routes = require('./app_server/routes/index');
 // var users = require('./app_server/routes/users');
@@ -27,6 +32,7 @@ var appClientFiles = [
   'app_client/reviewModal/reviewModal.controller.js',
   'app_client/common/services/geolocation.service.js',
   'app_client/common/services/wifinderData.service.js',
+  'app_client/common/services/yelp.service.js',
   'app_client/common/filters/formatDistance.filter.js',
   'app_client/common/filters/addHtmlLineBreaks.filter.js',
   'app_client/common/directives/navigation/navigation.directive.js',
@@ -54,8 +60,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'app_client')));
 
-// app.use('/', routes);
-// app.use('/users', users);
+app.use(passport.initialize());
 app.use('/api', routesApi);
 
 app.use(function(req, res) {

@@ -24,6 +24,19 @@ var theEarth = (function() {
 })();
 
 /* GET list of locations */
+module.exports.locationsGet = function(req, res) {
+  var term = req.query.term,
+      location = req.query.location,
+      tokenSecret = req.query.oauth_token_secret,
+      consumerSecret = req.query.oauth_consumer_secret,
+      consumerKey = req.query.oauth_consumer_key,
+      token = req.query.oauth_token,
+      signatureMethod = req.query.oauth_signature_method,
+      signature = req.query.oauth_signature,
+      timestamp = req.query.oauth_timestamp,
+      nonce = req.query.oauth_nonce;
+};
+
 module.exports.locationsListByDistance = function(req, res) {
   var lng = parseFloat(req.query.lng);
   var lat = parseFloat(req.query.lat);

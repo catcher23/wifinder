@@ -3,15 +3,15 @@
     .module('wifinderApp')
     .controller('homeCtrl', homeCtrl);
 
-  homeCtrl.$inject = ['$scope', 'wifinderData', 'geolocation'];
-  function homeCtrl ($scope, wifinderData, geolocation) {
+  homeCtrl.$inject = ['$scope', 'wifinderData', 'geolocation', 'yelp'];
+  function homeCtrl ($scope, wifinderData, geolocation, yelp) {
     var vm = this;
     vm.pageHeader = {
       title: 'wifinder',
-      strapline: 'Find places to work with wifi near you!'
+      strapline: yelp.getLocations()
     };
     vm.sidebar = {
-      content: "Looking for wifi and a seat? wiFinder helps you find places to work when out and about. Perhaps with coffee, cake or a pint? Let wiFinder help you find the place you're looking for."
+      content:development.yelp.consumerKey
     };
     vm.message = 'Checking your location';
     vm.getData = function (position) {
@@ -24,6 +24,7 @@
         .success(function(data) {
           vm.message = data.length > 0 ? "" : "No locations found nearby";
           vm.data = { locations: data };
+
         })
         .error(function (e) {
           vm.message = "Sorry, something's gone wrong";
@@ -40,5 +41,6 @@
       });
     };
     geolocation.getPosition(vm.getData,vm.showError,vm.noGeo);
+
   }
 })();
