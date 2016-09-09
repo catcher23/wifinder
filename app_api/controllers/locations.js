@@ -1,5 +1,10 @@
 var mongoose = require('mongoose');
 var Loc = mongoose.model('Location');
+var oauthSignature = require('oauth-signature');
+var n = require('nonce')();
+var request = require('request');
+var qs = require('querystring');
+var _ = require('lodash');
 
 var sendJSONresponse = function(res, status, content) {
   res.status(status);
@@ -24,18 +29,41 @@ var theEarth = (function() {
 })();
 
 /* GET list of locations */
-module.exports.locationsGet = function(req, res) {
-  var term = req.query.term,
-      location = req.query.location,
-      tokenSecret = req.query.oauth_token_secret,
-      consumerSecret = req.query.oauth_consumer_secret,
-      consumerKey = req.query.oauth_consumer_key,
-      token = req.query.oauth_token,
-      signatureMethod = req.query.oauth_signature_method,
-      signature = req.query.oauth_signature,
-      timestamp = req.query.oauth_timestamp,
-      nonce = req.query.oauth_nonce;
+
+module.exports.findLocation = function (req, res, callback) {
+  var httpMethod = 'GET',
+      url = 'http://api.yelp.com/v2/search';
+
+  var parameters = {
+    term: req.query.term,
+    location: req.query.location
+  };
+
+  var required_parameters = {
+    oauth_consumer_key: process.env.CONSUMER_KEY,
+    oauth_token: process.env.TOKEN,
+    oauth_nonce: n(),
+    oauth_timestamp: n().toString().substr(0, 10),
+    oauth_signature_method: 'HMAC-SHA1',
+    oauth_version: '1.0'
+  };
+
+  var parameters = _.assign(parameters, required_parameters),
+      consumerSecret = process.env.CONSUMER_SECRET,
+      tokenSecret = process.env.TOKEN_SECRET;
+
+  var signature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret, {encodeSignature: false});
+
+  parameters.oauth_signature = signature;
+
+  var paramURL = qs.stringify(parameters);
+  var apiURL = url + '?' + paramURL;
+
+  request(apiURL, function(error, response, body){
+    return callback(error, response, body);
+  });
 };
+
 
 module.exports.locationsListByDistance = function(req, res) {
   var lng = parseFloat(req.query.lng);
